@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#4f46e5" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="حساب من" />
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+<link rel="stylesheet" href="style.css" />
+<title>حساب من</title>
+</head>
+<body>
+
+<section id="view-home" class="view active">
+  <header class="app-header">
+    <h1>حساب من</h1>
+  </header>
+
+  <div class="balance-card">
+    <span class="balance-label">موجودی فعلی</span>
+    <span id="balance-value" class="balance-value">0 تومان</span>
+  </div>
+
+  <div class="today-row">
+    <div class="today-box income">
+      <span class="today-label">درآمد امروز</span>
+      <span id="today-income" class="today-value">0</span>
+    </div>
+    <div class="today-box expense">
+      <span class="today-label">هزینه امروز</span>
+      <span id="today-expense" class="today-value">0</span>
+    </div>
+  </div>
+
+  <div class="action-grid">
+    <button class="action-btn expense" data-action="add-expense">
+      <span class="action-icon">−</span>
+      <span>ثبت هزینه</span>
+    </button>
+    <button class="action-btn income" data-action="add-income">
+      <span class="action-icon">+</span>
+      <span>ثبت درآمد</span>
+    </button>
+    <button class="action-btn voice" data-action="voice">
+      <span class="action-icon">🎤</span>
+      <span>ثبت صوتی</span>
+    </button>
+    <button class="action-btn reports" data-action="reports">
+      <span class="action-icon">📊</span>
+      <span>گزارش‌ها</span>
+    </button>
+  </div>
+
+  <div class="recent-section">
+    <h2>آخرین تراکنش‌ها</h2>
+    <div id="recent-list" class="tx-list"></div>
+  </div>
+</section>
+
+<section id="view-form" class="view">
+  <header class="app-header">
+    <button class="back-btn" data-action="back">‹ بازگشت</button>
+    <h1 id="form-title">ثبت هزینه</h1>
+  </header>
+
+  <form id="tx-form" class="tx-form">
+    <input type="hidden" id="tx-id" />
+    <input type="hidden" id="tx-type" />
+
+    <label class="field">
+      <span>مبلغ (تومان)</span>
+      <input type="text" id="tx-amount" inputmode="numeric" placeholder="مثلاً 350000" required />
+    </label>
+
+    <label class="field">
+      <span id="tx-title-label">عنوان / شرح</span>
+      <input type="text" id="tx-title" placeholder="مثلاً خرید مواد غذایی" required />
+    </label>
+
+    <label class="field" id="category-field">
+      <span>دسته‌بندی</span>
+      <select id="tx-category"></select>
+    </label>
+
+    <div class="field-row">
+      <label class="field">
+        <span>تاریخ</span>
+        <input type="text" id="tx-date" placeholder="1405/07/17" inputmode="numeric" />
+      </label>
+      <label class="field">
+        <span>ساعت</span>
+        <input type="text" id="tx-time" placeholder="14:30" inputmode="numeric" />
+      </label>
+    </div>
+
+    <label class="field">
+      <span>توضیحات (اختیاری)</span>
+      <textarea id="tx-note" rows="2"></textarea>
+    </label>
+
+    <div class="form-actions">
+      <button type="button" id="add-category-btn" class="secondary-btn">افزودن دسته‌بندی</button>
+      <button type="submit" class="primary-btn">ذخیره</button>
+    </div>
+    <button type="button" id="delete-tx-btn" class="danger-btn hidden">حذف این تراکنش</button>
+  </form>
+</section>
+
+<section id="view-reports" class="view">
+  <header class="app-header">
+    <button class="back-btn" data-action="back">‹ بازگشت</button>
+    <h1>گزارش‌ها</h1>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" data-period="daily">روزانه</button>
+    <button class="tab" data-period="weekly">هفتگی</button>
+    <button class="tab" data-period="monthly">ماهانه</button>
+    <button class="tab" data-period="all">همه</button>
+  </div>
+
+  <div class="summary-card">
+    <div class="summary-item income">
+      <span>درآمد</span>
+      <b id="rep-income">0</b>
+    </div>
+    <div class="summary-item expense">
+      <span>هزینه</span>
+      <b id="rep-expense">0</b>
+    </div>
+    <div class="summary-item balance">
+      <span>مانده</span>
+      <b id="rep-balance">0</b>
+    </div>
+  </div>
+
+  <div class="filter-box">
+    <input type="text" id="filter-search" placeholder="جستجو در شرح..." />
+    <select id="filter-type">
+      <option value="">همه انواع</option>
+      <option value="expense">هزینه</option>
+      <option value="income">درآمد</option>
+    </select>
+    <select id="filter-category">
+      <option value="">همه دسته‌ها</option>
+    </select>
+    <input type="text" id="filter-min" placeholder="حداقل مبلغ" inputmode="numeric" />
+    <input type="text" id="filter-max" placeholder="حداکثر مبلغ" inputmode="numeric" />
+    <button id="filter-clear" class="secondary-btn">پاک کردن فیلترها</button>
+  </div>
+
+  <div id="category-breakdown" class="category-breakdown"></div>
+
+  <div id="report-list" class="tx-list"></div>
+</section>
+
+<section id="view-voice" class="view">
+  <header class="app-header">
+    <button class="back-btn" data-action="back">‹ بازگشت</button>
+    <h1>ثبت صوتی</h1>
+  </header>
+
+  <div class="voice-container">
+    <button id="mic-btn" class="mic-btn">🎤</button>
+    <p id="voice-status" class="voice-status">برای شروع صحبت، دکمه را لمس کنید</p>
+    <div id="voice-result" class="voice-result hidden">
+      <p id="voice-text"></p>
+      <div class="voice-form-preview" id="voice-preview"></div>
+      <button id="voice-confirm" class="primary-btn">تأیید و ثبت</button>
+      <button id="voice-cancel" class="secondary-btn">انصراف</button>
+    </div>
+  </div>
+</section>
+
+<section id="view-backup" class="view">
+  <header class="app-header">
+    <button class="back-btn" data-action="back">‹ بازگشت</button>
+    <h1>پشتیبان‌گیری</h1>
+  </header>
+
+  <div class="backup-container">
+    <button id="export-btn" class="primary-btn">📤 خروجی JSON</button>
+    <label class="primary-btn file-label">
+      📥 ورود از فایل
+      <input type="file" id="import-input" accept=".json,application/json" hidden />
+    </label>
+    <button id="clear-all-btn" class="danger-btn">🗑 حذف همه اطلاعات</button>
+    <p class="hint">فایل پشتیبان شامل تمام تراکنش‌ها و دسته‌بندی‌های شماست.</p>
+  </div>
+</section>
+
+<nav id="bottom-nav" class="bottom-nav">
+  <button data-action="home" class="active">🏠 خانه</button>
+  <button data-action="reports">📊 گزارش‌ها</button>
+  <button data-action="voice">🎤 صوتی</button>
+  <button data-action="backup">💾 پشتیبان</button>
+</nav>
+
+<div id="toast" class="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
