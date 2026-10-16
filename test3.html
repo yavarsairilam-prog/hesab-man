@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><meta charset="UTF-8"><title>تست ۳</title></head>
+<body>
+<h1 id="status" style="font-size:24px">در حال تست...</h1>
+<div id="output" style="font-size:20px;margin-top:20px"></div>
+
+<script>
+  var log = [];
+  function show(msg, ok) {
+    log.push((ok ? '✅ ' : '❌ ') + msg);
+    document.getElementById('output').innerHTML = log.join('<br>');
+  }
+  
+  // تست ۱: توابع پایه
+  try {
+    function toLatinDigits(str) {
+      if (str == null) return '';
+      return String(str)
+        .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
+        .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+    }
+    var t = toLatinDigits('۱۲۳');
+    if (t === '123') show('toLatinDigits کار می‌کند', true);
+    else show('toLatinDigits خروجی اشتباه: ' + t, false);
+  } catch (e) {
+    show('toLatinDigits خطا: ' + e.message, false);
+  }
+  
+  // تست ۲: formatMoney
+  try {
+    function toFaDigits(str) {
+      const fa = '۰۱۲۳۴۵۶۷۸۹';
+      return String(str).replace(/\d/g, d => fa[+d]);
+    }
+    function formatNumber(n) {
+      if (n == null || isNaN(n)) return '0';
+      const sign = n < 0 ? '-' : '';
+      const abs = Math.abs(Math.round(n));
+      return sign + abs.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+    function formatMoney(n) {
+      return toFaDigits(formatNumber(n)) + ' تومان';
+    }
+    var m = formatMoney(1250000);
+    if (m.indexOf('۱,۲۵۰,۰۰۰') !== -1) show('formatMoney کار می‌کند: ' + m, true);
+    else show('formatMoney خروجی: ' + m, false);
+  } catch (e) {
+    show('formatMoney خطا: ' + e.message, false);
+  }
+  
+  // تست ۳: تاریخ شمسی
+  try {
+    function gregorianToJalali(gy, gm, gd) {
+      const g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+      let jy = (gy <= 1600) ? 0 : 979;
+      gy -= (gy <= 1600) ? 621 : 1600;
+      const gy2 = (gm > 2) ? (gy + 1) : gy;
+      let days = (365 * gy) + Math.floor((gy2 + 3) / 4) - Math.floor((gy2 + 99) / 100)
+        + Math.floor((gy2 + 399) / 400) - 80 + gd + g_d_m[gm - 1];
+      jy += 33 * Math.floor(days / 12053);
+      days %= 12053;
+      jy += 4 * Math.floor(days / 1461);
+      days %= 1461;
+      if (days > 365) {
+        jy += Math.floor((days - 1) / 365);
+        days = (days - 1) % 365;
+      }
+      const jm = (days < 186) ? 1 + Math.floor(days / 31) : 7 + Math.floor((days - 186) / 30);
+      const jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
+      return [jy, jm, jd];
+    }
+    var d = gregorianToJalali(2026, 10, 16);
+    show('تاریخ شمسی: ' + d.join('/'), true);
+  } catch (e) {
+    show('تاریخ خطا: ' + e.message, false);
+  }
+  
+  document.getElementById('status').textContent = 'تست تمام شد - نتیجه پایین';
+  document.getElementById('status').style.color = 'green';
+</script>
+</body>
+</html>
