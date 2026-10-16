@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><meta charset="UTF-8"><title>تست اتصال</title></head>
+<body>
+<h1 id="status" style="color:red;font-size:24px">در حال بارگذاری app.js...</h1>
+<button id="btn1">تست دکمه ۱</button>
+<div id="output"></div>
+
+<script src="app.js"></script>
+<script>
+  setTimeout(function(){
+    var s = document.getElementById('status');
+    if (typeof State === 'undefined') {
+      s.textContent = 'app.js بارگذاری نشد یا خطا داد ❌';
+      s.style.color = 'red';
+    } else {
+      s.textContent = 'app.js بارگذاری شد و State ساخته شد ✅';
+      s.style.color = 'green';
+      document.getElementById('output').textContent = 
+        'تعداد تراکنش‌ها: ' + State.transactions.length;
+    }
+  }, 1500);
+  
+  document.getElementById('btn1').addEventListener('click', function(){
+    alert('تست ۲ کار می‌کند');
+  });
+</script>
+</body>
+</html>
