@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="حساب من">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0f3d3a">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="stylesheet" href="style.css">
+<title>حساب من</title>
+</head>
+<body>
+<main id="home" class="view on">
+  <header class="top"><h1>حساب من</h1><button id="bk" class="ic" aria-label="پشتیبان‌گیری">⚙</button></header>
+  <section class="bal"><span>موجودی فعلی</span><b id="bal">0 تومان</b></section>
+  <section class="two">
+    <div><span>درآمد امروز</span><b id="ti" class="inc">0</b></div>
+    <div><span>هزینه امروز</span><b id="te" class="exp">0</b></div>
+  </section>
+  <div class="acts">
+    <button class="big exp" data-new="expense">ثبت هزینه</button>
+    <button class="big inc" data-new="income">ثبت درآمد</button>
+  </div>
+  <button id="mic" class="mic">🎤 ثبت صوتی</button>
+  <button id="gr" class="big alt">گزارش‌ها</button>
+  <h2>آخرین تراکنش‌ها</h2>
+  <div id="recent" class="list"></div>
+</main>
+
+<main id="rep" class="view">
+  <header class="top"><button id="back" class="ic" aria-label="بازگشت">→</button><h1>گزارش‌ها</h1><span class="ic"></span></header>
+  <div class="tabs" id="tabs">
+    <button data-p="day">روزانه</button><button data-p="week">هفتگی</button><button data-p="month">ماهانه</button><button data-p="all">همه</button>
+  </div>
+  <section class="three">
+    <div><span>درآمد</span><b id="ri" class="inc">0</b></div>
+    <div><span>هزینه</span><b id="re" class="exp">0</b></div>
+    <div><span>مانده</span><b id="rb">0</b></div>
+  </section>
+  <details class="flt"><summary>جستجو و فیلتر</summary>
+    <input id="q" placeholder="جستجو در عنوان و توضیحات">
+    <div class="row2">
+      <select id="ft"><option value="">همه انواع</option><option value="expense">هزینه</option><option value="income">درآمد</option></select>
+      <select id="fc"></select>
+    </div>
+    <div class="row2"><input id="fmin" inputmode="decimal" placeholder="حداقل مبلغ"><input id="fmax" inputmode="decimal" placeholder="حداکثر مبلغ"></div>
+    <div class="row2"><input id="ffrom" inputmode="numeric" placeholder="از تاریخ 1405/01/01"><input id="fto" inputmode="numeric" placeholder="تا تاریخ 1405/12/29"></div>
+    <button id="fr" class="sm">پاک کردن فیلترها</button>
+  </details>
+  <h2>هزینه بر اساس دسته‌بندی</h2>
+  <div id="cb"></div>
+  <h2>تراکنش‌ها <small id="cnt"></small></h2>
+  <div id="list" class="list"></div>
+</main>
+
+<div id="sh" class="sheet"><div>
+  <h2 id="st">ثبت تراکنش</h2>
+  <div class="seg" id="seg"><button data-t="expense">هزینه</button><button data-t="income">درآمد</button></div>
+  <label>مبلغ (تومان)<input id="fa" inputmode="decimal" autocomplete="off" placeholder="مثلاً 350000"></label>
+  <label><span id="ftl">عنوان / شرح</span><input id="ftt" autocomplete="off"></label>
+  <label id="fcw">دسته‌بندی<span class="row"><select id="fcs"></select><button type="button" id="addc" class="sm">+ جدید</button></span></label>
+  <div class="row2">
+    <label>تاریخ (شمسی)<input id="fd" inputmode="numeric" placeholder="1405/07/17"></label>
+    <label>ساعت<input id="fh" type="time"></label>
+  </div>
+  <label>توضیحات (اختیاری)<textarea id="fn" rows="2"></textarea></label>
+  <div class="row"><button id="fs" class="big">ذخیره</button><button id="fx" class="big alt">انصراف</button></div>
+  <button id="fdel" class="big danger" hidden>حذف این تراکنش</button>
+</div></div>
+
+<div id="vs" class="sheet"><div>
+  <h2>ثبت صوتی</h2>
+  <button id="vm" class="micbig" aria-label="میکروفون">🎤</button>
+  <p id="vstat">میکروفون را بزنید و بگویید: «امروز ۳۰۰ هزار تومان بابت خرید مواد غذایی هزینه کردم»</p>
+  <textarea id="vtext" rows="3" placeholder="یا متن را اینجا تایپ کنید (می‌توانید از میکروفون کیبورد گوشی هم استفاده کنید)"></textarea>
+  <div class="row"><button id="va" class="big">تحلیل و ادامه</button><button id="vx" class="big alt">بستن</button></div>
+</div></div>
+
+<div id="bs" class="sheet"><div>
+  <h2>پشتیبان‌گیری</h2>
+  <p class="hint">داده‌ها فقط روی همین دستگاه هستند. مرتب فایل پشتیبان بگیرید و در برنامه Files ذخیره کنید.</p>
+  <button id="exp" class="big">گرفتن نسخه پشتیبان (JSON)</button>
+  <label class="big alt filebtn">وارد کردن فایل پشتیبان<input id="imp" type="file" accept=".json,application/json"></label>
+  <button id="wipe" class="big danger">حذف همه داده‌ها</button>
+  <button id="bx" class="big alt">بستن</button>
+</div></div>
+
+<div id="toast" role="status"></div>
+<script src="app.js"></script>
+</body>
+</html>
